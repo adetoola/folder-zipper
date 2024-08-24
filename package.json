@@ -1,0 +1,96 @@
+{
+  "name": "zip-files",
+  "displayName": "Zip Files",
+  "description": "Combine multiple files into a single clipboard copy",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.92.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.zipFiles",
+        "title": "Zip Files: Combine Selected Files"
+      }
+    ],
+    "configuration": {
+      "title": "ZipFiles",
+      "properties": {
+        "zipFiles.includePatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/*.{js,ts,jsx,tsx}",
+            "**/*.{html,css,scss,sass,less}",
+            "**/*.{json,md,yml,yaml}",
+            "**/*.{py,rb,java,go,rs}"
+          ],
+          "description": "Glob patterns to include files for combining."
+        },
+        "zipFiles.excludePatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/node_modules/**",
+            "**/dist/**",
+            "**/build/**",
+            "**/.git/**",
+            "**/.DS_Store",
+            "**/*.log",
+            "**/tmp/**",
+            "**/.vscode/**",
+            "**/.idea/**",
+            "**/coverage/**"
+          ],
+          "description": "Glob patterns to exclude files from combining."
+        },
+        "zipFiles.addFilenameComments": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to add filename comments to the top of each file in the combined code."
+        }
+      }
+    },
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "extension.zipFiles",
+          "group": "zipFiles@1",
+          "when": "explorerViewletVisible"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.7",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.92.0",
+    "@typescript-eslint/eslint-plugin": "^7.14.1",
+    "@typescript-eslint/parser": "^7.11.0",
+    "@vscode/test-cli": "^0.0.9",
+    "@vscode/test-electron": "^2.4.0",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "glob": "^11.0.0"
+  }
+}
