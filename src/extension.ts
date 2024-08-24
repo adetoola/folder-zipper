@@ -6,30 +6,44 @@ import * as vscode from 'vscode';
 
 // Constants
 const CONFIG_SECTION = "zipFiles";
-const DEFAULT_INCLUDE_PATTERNS = [
-  "**/*.{js,ts,jsx,tsx}",
-  "**/*.{html,css,scss,sass,less}",
-  "**/*.{json,md,yml,yaml}",
-  "**/*.{py,rb,java,go,rs}",
-];
-const DEFAULT_EXCLUDE_PATTERNS = [
-  "**/node_modules/**",
-  "**/dist/**",
-  "**/build/**",
-  "**/.git/**",
-  "**/.DS_Store",
-  "**/*.log",
-  "**/tmp/**",
-  "**/.vscode/**",
-  "**/.idea/**",
-  "**/coverage/**",
-];
-
+const PUBLISHER_NAME = "adetoola";
 // Interfaces
 interface ZipFilesConfig {
   includePatterns: string[];
   excludePatterns: string[];
   addFilenameComments: boolean;
+}
+
+/**
+ * Retrieves the default configuration from package.json.
+ * @returns {Promise<ZipFilesConfig>} A promise that resolves to the default configuration.
+ */
+async function getDefaultConfig(): Promise<ZipFilesConfig> {
+  const extensionPath = vscode.extensions.getExtension(
+    `${PUBLISHER_NAME}.zip-files`
+  )?.extensionPath;
+  if (!extensionPath) {
+    throw new Error("Unable to locate extension path");
+  }
+
+  const packageJsonPath = path.join(extensionPath, "package.json");
+  const packageJsonContent = await fs.readFile(packageJsonPath, "utf8");
+  const packageJson = JSON.parse(packageJsonContent);
+
+  return {
+    includePatterns:
+      packageJson.contributes.configuration.properties[
+        "zipFiles.includePatterns"
+      ].default,
+    excludePatterns:
+      packageJson.contributes.configuration.properties[
+        "zipFiles.excludePatterns"
+      ].default,
+    addFilenameComments:
+      packageJson.contributes.configuration.properties[
+        "zipFiles.addFilenameComments"
+      ].default,
+  };
 }
 
 /**
@@ -61,23 +75,27 @@ async function readZipFilesRcConfig(): Promise<Partial<ZipFilesConfig> | null> {
 }
 
 /**
- * Retrieves the configuration for the ZipFiles extension, merging .zipfilesrc with VSCode settings.
+ * Retrieves the configuration for the ZipFiles extension, merging .zipfilesrc, VSCode settings, and default values.
  * @returns {Promise<ZipFilesConfig>} A promise that resolves to the merged configuration object.
  */
 async function getZipFilesConfig(): Promise<ZipFilesConfig> {
+  const defaultConfig = await getDefaultConfig();
   const vscodeConfig = vscode.workspace.getConfiguration(CONFIG_SECTION);
   const rcConfig = await readZipFilesRcConfig();
 
   const mergedConfig: ZipFilesConfig = {
     includePatterns:
       rcConfig?.includePatterns ??
-      vscodeConfig.get("includePatterns", DEFAULT_INCLUDE_PATTERNS),
+      vscodeConfig.get("includePatterns", defaultConfig.includePatterns),
     excludePatterns:
       rcConfig?.excludePatterns ??
-      vscodeConfig.get("excludePatterns", DEFAULT_EXCLUDE_PATTERNS),
+      vscodeConfig.get("excludePatterns", defaultConfig.excludePatterns),
     addFilenameComments:
       rcConfig?.addFilenameComments ??
-      vscodeConfig.get("addFilenameComments", true),
+      vscodeConfig.get(
+        "addFilenameComments",
+        defaultConfig.addFilenameComments
+      ),
   };
 
   console.log("Merged ZipFiles configuration:", mergedConfig);

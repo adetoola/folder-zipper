@@ -2,12 +2,26 @@
   "name": "zip-files",
   "displayName": "Zip Files",
   "description": "Combine multiple files into a single clipboard copy",
+  "icon": "assets/icons/zip-files.png",
   "version": "0.0.1",
+  "publisher": "adetoola",
   "engines": {
     "vscode": "^1.92.0"
   },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "license": "SEE LICENSE IN LICENSE",
   "categories": [
     "Other"
+  ],
+  "keywords": [
+    "zip",
+    "files",
+    "combine",
+    "clipboard",
+    "LLM"
   ],
   "activationEvents": [],
   "main": "./out/extension.js",

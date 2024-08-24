@@ -80,7 +80,3 @@ If no custom configuration is provided, ZipFiles uses the following default sett
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the MIT License.
