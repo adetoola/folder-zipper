@@ -1,71 +1,86 @@
-# folder-zipper README
+# ZipFiles VSCode Extension
 
-This is the README for your extension "folder-zipper". After writing up a brief description, we recommend including the following sections.
+ZipFiles is a Visual Studio Code extension that allows you to quickly combine multiple files into a single text output, making it easy to share code snippets or create consolidated views of your project files.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- Combine multiple files into a single text output
+- Customizable include and exclude patterns for file selection
+- Option to add filename comments to the combined output
+- Project-specific configuration using `.zipfilesrc` file
+- Progress indicator for large file operations
+- Detailed metadata about the combined files
 
-For example if there is an image subfolder under your extension project workspace:
+## Installation
 
-\!\[feature X\]\(images/feature-x.png\)
+1. Open Visual Studio Code
+2. Go to the Extensions view (Ctrl+Shift+X or Cmd+Shift+X)
+3. Search for "ZipFiles"
+4. Click Install
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## Usage
 
-## Requirements
+1. Select one or more files or folders in the VS Code file explorer
+2. Right-click and select "Zip Files" from the context menu, or use the command palette (Ctrl+Shift+P or Cmd+Shift+P) and search for "Zip Files"
+3. The extension will combine the selected files based on your configuration
+4. The combined code will be copied to your clipboard, and you'll see a notification with metadata about the operation
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+## Configuration
 
-## Extension Settings
+You can configure ZipFiles using VS Code settings or a project-specific `.zipfilesrc` file.
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+### VS Code Settings
 
-For example:
+Open your VS Code settings (File > Preferences > Settings) and search for "ZipFiles" to find the following options:
 
-This extension contributes the following settings:
+- `zipFiles.includePatterns`: Array of glob patterns for files to include
+- `zipFiles.excludePatterns`: Array of glob patterns for files to exclude
+- `zipFiles.addFilenameComments`: Boolean to toggle adding filename comments in the output
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+### Project-specific Configuration
 
-## Known Issues
+Create a `.zipfilesrc` file in your project root directory with the following structure:
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+```json
+{
+  "includePatterns": ["**/*.{js,ts}", "**/*.md"],
+  "excludePatterns": ["**/node_modules/**", "**/dist/**"],
+  "addFilenameComments": true
+}
+```
 
-## Release Notes
+The `.zipfilesrc` configuration takes precedence over VS Code settings.
 
-Users appreciate release notes as you update your extension.
+## Default Configuration
 
-### 1.0.0
+If no custom configuration is provided, ZipFiles uses the following default settings:
 
-Initial release of ...
+- Include patterns:
 
-### 1.0.1
+  - `**/*.{js,ts,jsx,tsx}`
+  - `**/*.{html,css,scss,sass,less}`
+  - `**/*.{json,md,yml,yaml}`
+  - `**/*.{py,rb,java,go,rs}`
 
-Fixed issue #.
+- Exclude patterns:
 
-### 1.1.0
+  - `**/node_modules/**`
+  - `**/dist/**`
+  - `**/build/**`
+  - `**/.git/**`
+  - `**/.DS_Store`
+  - `**/*.log`
+  - `**/tmp/**`
+  - `**/.vscode/**`
+  - `**/.idea/**`
+  - `**/coverage/**`
 
-Added features X, Y, and Z.
+- Add filename comments: `true`
 
----
+## Contributing
 
-## Following extension guidelines
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+## License
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+This project is licensed under the MIT License.
